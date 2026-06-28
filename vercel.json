@@ -1,14 +1,13 @@
 {
-  "builds": [
-    {
-      "src": "app.py",
-      "use": "@vercel/python"
+  "functions": {
+    "api/index.py": {
+      "memory": 256
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "app.py"
+      "source": "/(.*)",
+      "destination": "/api/index.py"
     }
   ]
 }

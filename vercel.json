@@ -1,13 +1,13 @@
 {
   "functions": {
-    "api/index.py": {
+    "api/app.py": {
       "memory": 256
     }
   },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index.py"
+      "destination": "/api/app.py"
     }
   ]
 }

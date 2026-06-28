@@ -25,10 +25,6 @@ async def add_custom_headers(request: Request, call_next):
 
 
 # ---------- CORS handling ----------
-# We use a simple middleware-like approach via OPTIONS handler and
-# manually set Access-Control-Allow-Origin only for the allowed origin.
-
-
 @app.options("/stats")
 async def options_handler(request: Request):
     origin = request.headers.get("origin")
@@ -37,13 +33,11 @@ async def options_handler(request: Request):
         response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "*"
-    # If origin doesn't match, we simply don't set ACAO header.
     return response
 
 
 @app.get("/stats")
 async def stats(request: Request, values: str = Query(...)):
-    # Parse comma-separated integers
     try:
         nums = [int(x.strip()) for x in values.split(",") if x.strip() != ""]
     except ValueError:
@@ -69,7 +63,6 @@ async def stats(request: Request, values: str = Query(...)):
 
     response = JSONResponse(content=result)
 
-    # Set CORS header only for allowed origin
     origin = request.headers.get("origin")
     if origin == ALLOWED_ORIGIN:
         response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN

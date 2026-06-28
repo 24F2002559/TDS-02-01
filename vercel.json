@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/app.py": {
-      "memory": 256
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",

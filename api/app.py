@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 
 # ---------- Configuration ----------
-ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "https://tds-02-01.vercel.app/")
+ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "https://dash-cml3ue.example.com")
 MY_EMAIL = "24f2002559@ds.study.iitm.ac.in"
 
 

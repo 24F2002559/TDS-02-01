@@ -12,7 +12,7 @@ ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "https://my-metrics.com")
 MY_EMAIL = "24f2002559@ds.study.iitm.ac.in"
 
 
-# ---------- Custom Middleware for X-Request-ID & X-Process-Time ----------
+# ---------- Middleware for X-Request-ID and X-Process-Time ----------
 @app.middleware("http")
 async def add_custom_headers(request: Request, call_next):
     start_time = time.time()
@@ -24,20 +24,21 @@ async def add_custom_headers(request: Request, call_next):
     return response
 
 
-# ---------- CORS handling ----------
+# ---------- CORS (strict, manual) ----------
 @app.options("/stats")
 async def options_handler(request: Request):
     origin = request.headers.get("origin")
-    response = JSONResponse(content={})
+    resp = JSONResponse(content={})
     if origin == ALLOWED_ORIGIN:
-        response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
-        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "*"
-    return response
+        resp.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
+        resp.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        resp.headers["Access-Control-Allow-Headers"] = "*"
+    return resp
 
 
 @app.get("/stats")
 async def stats(request: Request, values: str = Query(...)):
+    # Parse comma‑separated integers
     try:
         nums = [int(x.strip()) for x in values.split(",") if x.strip() != ""]
     except ValueError:
@@ -61,9 +62,8 @@ async def stats(request: Request, values: str = Query(...)):
         "mean": mean,
     }
 
-    response = JSONResponse(content=result)
-
+    resp = JSONResponse(content=result)
     origin = request.headers.get("origin")
     if origin == ALLOWED_ORIGIN:
-        response.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
-    return response
+        resp.headers["Access-Control-Allow-Origin"] = ALLOWED_ORIGIN
+    return resp
